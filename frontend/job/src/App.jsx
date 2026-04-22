@@ -5,7 +5,7 @@ import { Button } from './components/ui/button'
 import Navbar from './components/shared/Navbar'
 import Login from './components/auth/Login'
 import Signup from './components/auth/Signup'
-import { createBrowserRouter, RouterProvider } from 'react-router'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Home from './components/Home'
 import Jobs from './components/Jobs'
 import Browse from './components/Browse'
@@ -15,6 +15,8 @@ import JobDescription from './components/JobDescription'
 import Companies from './components/admin/Companies'
 import CreateCompany from './components/admin/CreateCompany'
 import CompanySetup from './components/admin/CompanySetup'
+import AdminJobs from './components/admin/AdminJobs'
+import PostJob from './components/admin/PostJob'
 const Layout = () => (
   <>
     <Navbar />
@@ -66,6 +68,14 @@ const appRouter = createBrowserRouter([
   {
     path:"/admin/company/:id",
     element:<CompanySetup/>
+  },
+  {
+    path:"/admin/jobs",
+    element:<AdminJobs/>
+  },
+  {
+    path:"/admin/jobs/create",
+    element:<PostJob/>
   },
   
   

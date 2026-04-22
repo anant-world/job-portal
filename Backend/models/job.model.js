@@ -48,5 +48,5 @@ const jobScehma=new mongoose.Schema({
         ref:'Application',
     }]
 
-})
+},{timestamps:true})
 export const Job= mongoose.model("Job",jobScehma)

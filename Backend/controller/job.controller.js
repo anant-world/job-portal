@@ -62,36 +62,36 @@ export const postJob = async (req, res) => {
 };
 
 
-export const getAllJobs=async(req,res)=>{
-    try {
-        const keyword= req.query.keyword || ""
-        const query={
-           $or:[
-            {title:{$regex:keyword ,$options:"i"}},
-            {description:{$regex:keyword ,$options:"i"}}
-            
-           ]
-        };
-        const jobs= await Job.find(query)
-        if(!jobs){
-            return res.status(404).json({
-                message:"job not found",
-                success:false
-            })
-        }
-        return res.status(200).json({
-            jobs,
-            success:true
-        })
-    } catch (error) {
-        console.log("Can't get all jobs posting error",error);
-        return res.status(500).json({
-            message:"cannot get all job postings ",
-            success:false
-        })
-        
+export const getAllJobs = async (req, res) => {
+  try {
+    const keyword = req.query.keyword;
+
+    let query = {};
+
+    if (keyword && keyword.trim() !== "") {
+      query = {
+        $or: [
+          { title: { $regex: keyword, $options: "i" } },
+          { description: { $regex: keyword, $options: "i" } }
+        ]
+      };
     }
-}
+
+    const jobs = await Job.find(query).populate("company");
+
+    return res.status(200).json({
+      jobs,
+      success: true
+    });
+
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Server error",
+      success: false
+    });
+  }
+};
 
 export const getJobById= async(req,res)=>{
     try{
@@ -116,7 +116,7 @@ export const getJobById= async(req,res)=>{
 export const getAdminJobs= async(req,res)=>{
     try {
         const adminId= req.id;
-        const jobs= await Job.find({created_by: adminId})
+        const jobs= await Job.find({created_by: adminId}).populate({path:"company"})
         if(!jobs){
             return res.status(404).json({
                 message:"Jobs not found.",

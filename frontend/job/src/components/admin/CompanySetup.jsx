@@ -10,7 +10,10 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { useSelector } from 'react-redux'
 import { useEffect } from 'react'
+import useGetCompanyById from '@/hooks/useGetCompanyById'
 function CompanySetup() {
+    const params = useParams()
+    useGetCompanyById(params.id)
     const [input, setInput] = useState({
         name: "",
         description: "",
@@ -22,7 +25,6 @@ function CompanySetup() {
     const {singleCompany}=useSelector(store=>store.company)
 
     const [loading, setLoading] = useState(false)
-    const params = useParams()
     const navigate = useNavigate()
 
     const changeEventHandler = (e) => {
@@ -47,7 +49,7 @@ function CompanySetup() {
         }
         try {
             setLoading(true)
-            const res = await axios.put(`${COMPANIES_API_END_POINT}/update/${params._id}`, formData, {
+            const res = await axios.put(`${COMPANIES_API_END_POINT}/update/${params.id}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }, withCredentials: true
@@ -68,7 +70,7 @@ function CompanySetup() {
             description:singleCompany.description ||  "",
             website:singleCompany.website || "",
             location: singleCompany.location ||"",
-            file: singleCompany.file || null
+            file:  null
         
         })
     },[singleCompany])
@@ -122,6 +124,7 @@ function CompanySetup() {
                             <Label>Logo</Label>
                             <Input
                                 type="file"
+                                name="file"
                                 accept="image/*"
                                 onChange={changeFileHandler} />
                         </div>
